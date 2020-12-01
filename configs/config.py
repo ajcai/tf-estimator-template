@@ -8,5 +8,6 @@ class Config():
     tf_random_seed = 19851211
     model_name = 'cnn-model-02'
     use_checkpoint = True
+    multiworker = True
 
 

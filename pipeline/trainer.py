@@ -64,18 +64,19 @@ def train():
     model_dir = 'trained_models/{}'.format(Config.model_name)
     train_data_files = ['datasets/cifar-10/train.tfrecords']
     valid_data_files = ['datasets/cifar-10/validation.tfrecords']
-
+    
+    strategy = tf.distribute.experimental.MultiWorkerMirroredStrategy() if Config.multiworker else None
     run_config = tf.estimator.RunConfig(
         log_step_count_steps=Config.log_interval_steps,
         save_summary_steps=Config.log_interval_steps,
         save_checkpoints_steps=Config.save_checkpoints_steps,
         tf_random_seed=Config.tf_random_seed,
         model_dir=model_dir,
+        train_distribute=strategy,
         session_config=tf.compat.v1.ConfigProto(
             allow_soft_placement=True,
             gpu_options=tf.compat.v1.GPUOptions(allow_growth=True,
                                                 force_gpu_compatible=True,
-                                                visible_device_list='0'
                                                )
         ),
     )
